@@ -35,6 +35,17 @@ The kernel module is installed in `/path/to/prefixdir/bin/pfc.ko`. To load it in
     insmod /path/to/prefixdir/bin/pfc.ko
 ```
 
+In particular, in order to execute the commands with root privileges using `sudo`:
+
+```shell
+    modprobe -ar iTCO_wdt iTCO_vendor_support
+    sudo sh -c 'echo 0 > /proc/sys/kernel/nmi_watchdog'
+    sudo sh -c 'echo 2 > /sys/bus/event_source/devices/cpu/rdpmc'
+    sudo insmod /path/to/prefixdir/bin/pfc.ko
+```
+
+It may be possible that `insmod /path/to/prefixdir/bin/pfc.ko` may fail with the error `Key was rejected by service` in case SecureBoot is enabled. To actually see if that's the case, running `mokutil --sb-state` will output the enable state of SecureBoot.
+
 ## Using `libpfc` in user-space
 
 ### Include
